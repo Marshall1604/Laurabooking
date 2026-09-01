@@ -3,6 +3,7 @@ import { Playfair_Display, Plus_Jakarta_Sans } from 'next/font/google';
 import './globals.css';
 import { AuthProvider } from '@/lib/auth/context';
 import { I18nProvider } from '@/lib/i18n/context';
+import { FloatingContactWidget } from '@/components/floating-contact-widget';
 
 const display = Playfair_Display({
   variable: '--font-aurelis-display',
@@ -118,6 +119,7 @@ export default function RootLayout({
         <I18nProvider>
           <AuthProvider>
             {children}
+            <FloatingContactWidget />
           </AuthProvider>
         </I18nProvider>
       </body>
