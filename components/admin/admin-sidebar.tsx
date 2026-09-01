@@ -12,6 +12,7 @@ import {
   Handshake,
   BookOpen,
   Settings,
+  LogOut,
 } from 'lucide-react';
 
 interface NavItem {
@@ -119,11 +120,27 @@ export function AdminSidebar() {
       </div>
 
       {/* Footer */}
-      <div className="pt-6 border-t border-white/10 text-xs text-[#666] flex items-center justify-between">
-        <Link href="/" className="hover:text-white transition-colors">
-          ← Về Trang Chủ
-        </Link>
-        <span className="font-mono text-[0.7rem] text-[#555]">v1.2.0 Pro</span>
+      <div className="pt-4 border-t border-white/10 space-y-2">
+        <button
+          type="button"
+          onClick={() => {
+            try {
+              sessionStorage.removeItem('laura_admin_auth_v1');
+              window.location.reload();
+            } catch {}
+          }}
+          className="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-xs font-medium text-rose-400 hover:text-rose-300 hover:bg-rose-500/10 border border-rose-500/20 transition-colors cursor-pointer"
+        >
+          <LogOut size={13} />
+          <span>Đăng Xuất Quản Trị</span>
+        </button>
+
+        <div className="pt-2 text-[0.7rem] text-[#666] flex items-center justify-between">
+          <Link href="/" className="hover:text-white transition-colors">
+            ← Về Trang Chủ
+          </Link>
+          <span className="font-mono text-[0.65rem] text-[#555]">v1.2.0 Pro</span>
+        </div>
       </div>
     </aside>
   );

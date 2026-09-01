@@ -104,6 +104,8 @@ export function BookingFlow() {
   const [promoError, setPromoError] = useState('');
   const [bookingRef, setBookingRef] = useState('');
   const [isDownloading, setIsDownloading] = useState(false);
+  const [ticketModalImage, setTicketModalImage] = useState<string | null>(null);
+  const [showTicketModal, setShowTicketModal] = useState(false);
 
   const [formData, setFormData] = useState<BookingFormData>({
     serviceSlug: 'massage-spa',
@@ -200,6 +202,34 @@ export function BookingFlow() {
       };
       localStorage.setItem('aurelis_bookings', JSON.stringify([newBooking, ...savedBookings]));
     } catch {}
+
+    // Send Automatic Telegram Notification
+    try {
+      const customToken = typeof window !== 'undefined' ? localStorage.getItem('laura_telegram_bot_token') : null;
+      const customChatId = typeof window !== 'undefined' ? localStorage.getItem('laura_telegram_chat_id') : null;
+
+      fetch('/api/telegram-notify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          dossierCode: generatedRef,
+          date: formData.date,
+          timeSlot: formData.timeSlot,
+          partySize: formData.guests,
+          packageName: selectedPackage.name,
+          venueName: selectedVenue.name,
+          guestName: formData.name || (locale === 'vi' ? 'Thượng Khách Bí Mật' : 'Discreet Guest'),
+          phone: formData.phone || 'Chưa cung cấp',
+          messagingApp: formData.messagingApp || 'WhatsApp',
+          totalPriceUsd: selectedPackage.priceUsd || 0,
+          totalPriceVnd: (selectedPackage.priceUsd || 0) * 25000,
+          customToken: customToken || undefined,
+          customChatId: customChatId || undefined,
+        }),
+      }).catch((err) => console.warn('Telegram notify error:', err));
+    } catch (e) {
+      console.warn('Telegram notify exception:', e);
+    }
 
     setIsSubmitted(true);
   };
@@ -412,23 +442,62 @@ export function BookingFlow() {
       ctx.font = '12px monospace';
       ctx.fillText('LAURA PRIVATE EXPERIENCES · OFFICIAL VIP RESERVATION', width / 2, height - 75);
 
-      // Export to Blob and download
-      canvas.toBlob((blob) => {
+      // Generate High-Res Data URL for instant mobile preview/saving
+      const dataUrl = canvas.toDataURL('image/png');
+      setTicketModalImage(dataUrl);
+
+      // Export to Blob and handle download / mobile share
+      canvas.toBlob(async (blob) => {
         if (!blob) {
           setIsDownloading(false);
+          setShowTicketModal(true);
           return;
         }
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `LAURA-BOOKING-${bookingRef || 'VIP'}.png`;
-        document.body.appendChild(a);
-        a.click();
-        setTimeout(() => {
-          document.body.removeChild(a);
-          URL.revokeObjectURL(url);
+
+        const isMobile = typeof navigator !== 'undefined' && /iPhone|iPad|iPod|Android/i.test(navigator.userAgent || '');
+
+        // 1. Try Mobile Web Share API (iOS Safari & Android Chrome native share sheet)
+        if (isMobile && typeof navigator !== 'undefined' && navigator.share) {
+          try {
+            const file = new File([blob], `LAURA-BOOKING-${bookingRef || 'VIP'}.png`, { type: 'image/png' });
+            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+              await navigator.share({
+                title: 'LAURA BOOKING VIP Ticket',
+                text: `Thẻ vé đặc quyền LAURA BOOKING - Mã hồ sơ: ${bookingRef}`,
+                files: [file],
+              });
+              setIsDownloading(false);
+              return;
+            }
+          } catch (shareErr: any) {
+            if (shareErr?.name === 'AbortError') {
+              setIsDownloading(false);
+              return;
+            }
+          }
+        }
+
+        // 2. Direct browser download trigger
+        try {
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `LAURA-BOOKING-${bookingRef || 'VIP'}.png`;
+          document.body.appendChild(a);
+          a.click();
+          setTimeout(() => {
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            setIsDownloading(false);
+          }, 400);
+        } catch {
           setIsDownloading(false);
-        }, 400);
+        }
+
+        // 3. For mobile, also show the instant modal so they can long-press to save
+        if (isMobile) {
+          setShowTicketModal(true);
+        }
       }, 'image/png');
     } catch (err) {
       console.error('Download ticket error:', err);
@@ -648,14 +717,90 @@ export function BookingFlow() {
             )}
           </button>
 
+          {/* Mobile Direct Save / Preview Button */}
+          <button
+            type="button"
+            onClick={handleDownloadPng}
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 text-xs uppercase tracking-wider font-bold text-white bg-[#1a1a1a] hover:bg-[#252525] border border-[var(--gold)]/40 rounded-lg shadow transition-all cursor-pointer"
+          >
+            <Sparkles size={14} className="text-[var(--gold)]" />
+            <span>{locale === 'vi' ? '📱 Lưu Vé Vào Điện Thoại' : '📱 Save Pass to Phone'}</span>
+          </button>
+
           {/* Return Home */}
           <Link
             href="/"
-            className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 text-xs uppercase tracking-wider text-white border border-white/15 hover:border-[var(--gold)] rounded-lg transition-colors font-medium cursor-pointer"
+            className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 text-xs uppercase tracking-wider text-white/80 border border-white/15 hover:border-white/40 rounded-lg transition-colors font-medium cursor-pointer"
           >
             {locale === 'vi' ? 'Về Trang Chủ' : 'Return Home'}
           </Link>
         </div>
+
+        {/* Modal: Mobile Ticket Save & Long-Press Helper */}
+        {showTicketModal && ticketModalImage && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-black/90 backdrop-blur-md animate-in fade-in duration-200">
+            <div className="bg-[#0e0e0e] border border-[var(--gold)]/50 rounded-2xl max-w-lg w-full max-h-[92vh] overflow-y-auto p-4 sm:p-6 text-center space-y-4 shadow-2xl relative">
+              {/* Close Button Top Right */}
+              <button
+                type="button"
+                onClick={() => setShowTicketModal(false)}
+                className="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/10 text-white hover:bg-white/20 flex items-center justify-center text-sm font-bold transition-colors cursor-pointer"
+              >
+                ✕
+              </button>
+
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--gold)]/10 text-[var(--gold-light)] text-[0.65rem] tracking-[0.2em] uppercase font-mono font-bold">
+                <Gem size={12} className="text-[var(--gold)]" />
+                <span>{locale === 'vi' ? 'THẺ VÉ ĐIỆN TỬ VIP' : 'VIP ELECTRONIC PASS'}</span>
+              </div>
+
+              <h3 className="text-xl sm:text-2xl font-serif text-white font-normal">
+                {locale === 'vi' ? 'Lưu Vé Vào Thư Viện Ảnh' : 'Save Pass to Photo Library'}
+              </h3>
+
+              {/* Mobile Tip Card */}
+              <div className="p-3 rounded-xl bg-[var(--gold)]/10 border border-[var(--gold)]/30 text-[0.75rem] text-[var(--gold-light)] text-left flex items-start gap-2.5 leading-relaxed">
+                <span className="text-base">📱</span>
+                <div>
+                  <strong className="font-semibold text-white block mb-0.5">
+                    {locale === 'vi' ? 'Hướng dẫn lưu trên điện thoại:' : 'Mobile Saving Guide:'}
+                  </strong>
+                  {locale === 'vi'
+                    ? 'Chạm và giữ ngón tay vào bức ảnh vé bên dưới 1 giây ➔ Chọn "Lưu ảnh" (Save Image) hoặc "Thêm vào Ảnh" để lưu vào máy!'
+                    : 'Touch and hold the ticket image below for 1 second ➔ Select "Save Image" or "Add to Photos".'}
+                </div>
+              </div>
+
+              {/* High-res Image Preview (Crisp & Touch-friendly) */}
+              <div className="rounded-xl overflow-hidden border border-white/15 bg-black max-w-sm mx-auto shadow-xl">
+                <img
+                  src={ticketModalImage}
+                  alt="LAURA BOOKING VIP Ticket"
+                  className="w-full h-auto block select-auto"
+                />
+              </div>
+
+              {/* Actions inside modal */}
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-2 pt-2">
+                <a
+                  href={ticketModalImage}
+                  download={`LAURA-VIP-${bookingRef || 'PASS'}.png`}
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 text-xs uppercase tracking-wider font-bold text-[#0a0805] bg-gradient-to-r from-[#b79051] via-[#e3c98d] to-[#b68b4b] rounded-lg shadow cursor-pointer"
+                >
+                  <Download size={14} />
+                  <span>{locale === 'vi' ? 'Tải File .PNG Về Máy' : 'Download .PNG File'}</span>
+                </a>
+                <button
+                  type="button"
+                  onClick={() => setShowTicketModal(false)}
+                  className="w-full sm:w-auto px-5 py-2.5 text-xs uppercase tracking-wider text-[#aaa] hover:text-white border border-white/10 rounded-lg transition-colors cursor-pointer"
+                >
+                  {locale === 'vi' ? 'Đóng Lại' : 'Close'}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     );
   }
