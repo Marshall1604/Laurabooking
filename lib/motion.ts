@@ -1,11 +1,11 @@
-export const TRANSITION_EASE = [0.22, 1, 0.36, 1] as const;
+export const TRANSITION_EASE = [0.19, 1, 0.22, 1] as const;
 export const TRANSITION_SMOOTH = [0.16, 1, 0.3, 1] as const;
 
 export const DURATIONS = {
-  fast: 0.3,
-  normal: 0.6,
-  slow: 0.9,
-  verySlow: 1.2,
+  fast: 0.45,
+  normal: 0.85,
+  slow: 1.25,
+  verySlow: 1.65,
 } as const;
 
 export const fadeInVariants = {

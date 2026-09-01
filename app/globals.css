@@ -124,3 +124,43 @@ button {
   animation: luxury-wiggle 3.5s cubic-bezier(0.36, 0, 0.66, -0.56) infinite;
 }
 
+@keyframes ios-spring-up {
+  0% {
+    opacity: 0;
+    transform: translateY(42px) scale(0.88);
+    filter: blur(8px);
+  }
+  68% {
+    opacity: 1;
+    transform: translateY(-2px) scale(1.01);
+    filter: blur(0px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0px);
+  }
+}
+
+.animate-ios-spring-1 {
+  animation: ios-spring-up 0.68s cubic-bezier(0.19, 1, 0.22, 1) 0.05s both;
+}
+
+.animate-ios-spring-2 {
+  animation: ios-spring-up 0.68s cubic-bezier(0.19, 1, 0.22, 1) 0.12s both;
+}
+
+.animate-ios-spring-3 {
+  animation: ios-spring-up 0.68s cubic-bezier(0.19, 1, 0.22, 1) 0.19s both;
+}
+
+.animate-ios-spring-4 {
+  animation: ios-spring-up 0.68s cubic-bezier(0.19, 1, 0.22, 1) 0.26s both;
+}
+
+.animate-ios-spring-5 {
+  animation: ios-spring-up 0.68s cubic-bezier(0.19, 1, 0.22, 1) 0.33s both;
+}
+
+
+

@@ -36,9 +36,9 @@ export function Hero() {
         <div className="max-w-3xl flex flex-col items-start">
           {/* Headline */}
           <motion.h1
-            initial={{ opacity: 0, y: 25, filter: 'blur(8px)' }}
+            initial={{ opacity: 0, y: 32, filter: 'blur(10px)' }}
             animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-            transition={{ duration: 0.8, delay: 0.1, ease: TRANSITION_EASE }}
+            transition={{ duration: 1.1, delay: 0.15, ease: TRANSITION_EASE }}
             className="text-5xl sm:text-7xl lg:text-8xl font-serif font-normal text-[var(--foreground)] tracking-tight leading-[1.0]"
           >
             {t('hero_headline')}
@@ -50,9 +50,9 @@ export function Hero() {
 
           {/* Description */}
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.25, ease: TRANSITION_EASE }}
+            initial={{ opacity: 0, y: 25, filter: 'blur(6px)' }}
+            animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+            transition={{ duration: 1.0, delay: 0.38, ease: TRANSITION_EASE }}
             className="mt-6 max-w-2xl text-base sm:text-lg text-[#bbb6ae] font-sans font-light leading-relaxed"
           >
             {t('hero_desc')}
@@ -60,9 +60,9 @@ export function Hero() {
 
           {/* Action Buttons */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4, ease: TRANSITION_EASE }}
+            initial={{ opacity: 0, y: 22, filter: 'blur(4px)' }}
+            animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+            transition={{ duration: 0.95, delay: 0.58, ease: TRANSITION_EASE }}
             className="mt-10 flex flex-wrap items-center gap-4 sm:gap-6"
           >
             <Link
