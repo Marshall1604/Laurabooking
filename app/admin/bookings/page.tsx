@@ -54,9 +54,9 @@ export default function AdminBookingsPage() {
       b.guestPhone,
       `"${b.venueName}"`,
       `"${b.packageName}"`,
-      b.date,
+      b.bookingDate,
       b.timeSlot,
-      b.totalAmountUsd,
+      b.totalPriceUsd,
       b.status,
     ]);
 
@@ -186,14 +186,14 @@ export default function AdminBookingsPage() {
 
                     {/* Ngày giờ */}
                     <td className="py-4 px-5 align-middle">
-                      <div className="text-xs font-medium text-white">{b.date}</div>
+                      <div className="text-xs font-medium text-white">{b.bookingDate}</div>
                       <span className="text-xs text-[#777] block mt-0.5">{b.timeSlot}</span>
                     </td>
 
                     {/* Số tiền */}
                     <td className="py-4 px-5 align-middle">
                       <div className="text-sm font-semibold text-white">
-                        ${b.totalAmountUsd} USD
+                        ${b.totalPriceUsd} USD
                       </div>
                     </td>
 

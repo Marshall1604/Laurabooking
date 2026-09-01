@@ -202,11 +202,11 @@ export default function AdminDashboardPage() {
                         </span>
                       </td>
                       <td className="py-4 px-5 align-middle">
-                        <div className="text-xs font-medium text-white">{booking.date}</div>
+                        <div className="text-xs font-medium text-white">{booking.bookingDate}</div>
                         <span className="text-xs text-[#777] block mt-0.5">{booking.timeSlot}</span>
                       </td>
                       <td className="py-4 px-5 align-middle text-sm font-semibold text-white">
-                        ${booking.totalAmountUsd} USD
+                        ${booking.totalPriceUsd} USD
                       </td>
                       <td className="py-4 px-5 align-middle text-right">
                         <div className="inline-flex items-center gap-1.5">

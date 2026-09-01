@@ -70,44 +70,44 @@ export default function AdminPartnersPage() {
                     {/* Tên đối tác */}
                     <td className="py-4 px-5 align-middle">
                       <span className="text-sm font-medium text-white block truncate">
-                        {p.venueName}
+                        {p.businessName}
                       </span>
                     </td>
 
                     {/* Dịch vụ & Thành phố */}
                     <td className="py-4 px-5 align-middle">
                       <span className="inline-block px-2.5 py-0.5 rounded-full bg-[var(--gold)]/10 text-[var(--gold-light)] border border-[var(--gold)]/20 text-xs font-medium uppercase mb-1">
-                        {p.category}
+                        {p.serviceCategory}
                       </span>
-                      <span className="text-xs text-[#888] block">📍 {p.city}</span>
+                      <span className="text-xs text-[#888] block">📍 {p.destination}</span>
                     </td>
 
                     {/* Người liên hệ */}
                     <td className="py-4 px-5 align-middle">
                       <div className="text-xs font-medium text-white">{p.contactName}</div>
-                      <span className="text-xs text-[#777] block mt-0.5">{p.contactEmail} · {p.contactPhone}</span>
+                      <span className="text-xs text-[#777] block mt-0.5">{p.email} · {p.phone}</span>
                     </td>
 
                     {/* Ghi chú */}
                     <td className="py-4 px-5 align-middle">
-                      <span className="text-xs text-[#888] line-clamp-2" title={p.notes}>
-                        "{p.notes}"
+                      <span className="text-xs text-[#888] line-clamp-2" title={p.description}>
+                        "{p.description}"
                       </span>
                     </td>
 
                     {/* Thao tác */}
                     <td className="py-4 px-5 align-middle text-right">
                       <div className="inline-flex items-center gap-1.5">
-                        {p.status === 'pending' && (
+                        {p.status === 'new' && (
                           <button
                             type="button"
-                            onClick={() => handleStatus(p.id, 'reviewed')}
+                            onClick={() => handleStatus(p.id, 'approved')}
                             className="h-8 px-3 bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500 hover:text-black rounded-lg text-xs font-semibold uppercase transition-colors"
                           >
                             Duyệt
                           </button>
                         )}
-                        {p.status === 'reviewed' && (
+                        {p.status === 'approved' && (
                           <span className="inline-block px-2.5 py-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-md text-xs font-medium">
                             Đã Duyệt
                           </span>

@@ -37,7 +37,8 @@ export default function AdminPostsPage() {
     coverImage: 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=1200&q=80',
     serviceTag: 'massage-spa',
     destinationTag: 'ho-chi-minh-city',
-    author: 'Ban Biên Tập AURELIS',
+    author: 'Ban Biên Tập LAURA',
+    isPublished: true,
     publishedAt: new Date().toISOString().split('T')[0],
   });
 
@@ -52,7 +53,8 @@ export default function AdminPostsPage() {
       coverImage: 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=1200&q=80',
       serviceTag: 'massage-spa',
       destinationTag: 'ho-chi-minh-city',
-      author: 'Ban Biên Tập AURELIS',
+      author: 'Ban Biên Tập LAURA',
+      isPublished: true,
       publishedAt: new Date().toISOString().split('T')[0],
     });
     setIsModalOpen(true);

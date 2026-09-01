@@ -112,6 +112,9 @@ export interface PartnerSubmission {
   createdAt: string;
 }
 
+export type PartnerRecord = PartnerSubmission;
+export type PostRecord = PostData;
+
 export interface MemberRecord {
   id: string;
   fullName: string;

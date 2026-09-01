@@ -30,14 +30,14 @@ export default function AdminMembersPage() {
     const matchesSearch =
       m.fullName.toLowerCase().includes(search.toLowerCase()) ||
       m.email.toLowerCase().includes(search.toLowerCase()) ||
-      m.alias.toLowerCase().includes(search.toLowerCase());
-    const matchesTier = tierFilter === 'all' || m.tier === tierFilter;
+      (m.role && m.role.toLowerCase().includes(search.toLowerCase()));
+    const matchesTier = tierFilter === 'all' || m.tierName === tierFilter;
     return matchesSearch && matchesTier;
   });
 
-  const handleUpgrade = (id: string, newTier: MemberRecord['tier']) => {
+  const handleUpgrade = (id: string, newTier: string) => {
     setMembers((prev) =>
-      prev.map((m) => (m.id === id ? { ...m, tier: newTier } : m))
+      prev.map((m) => (m.id === id ? { ...m, tierName: newTier } : m))
     );
   };
 
@@ -132,7 +132,7 @@ export default function AdminMembersPage() {
                             {m.fullName}
                           </span>
                           <span className="text-xs text-[#777] block mt-0.5 truncate">
-                            Bí danh: {m.alias || 'Chưa thiết lập'}
+                            Vai trò: {m.role ? m.role.toUpperCase() : 'MEMBER'}
                           </span>
                         </div>
                       </div>
@@ -147,13 +147,13 @@ export default function AdminMembersPage() {
                     {/* Hạng mức */}
                     <td className="py-4 px-5 align-middle">
                       <span className="inline-block px-3 py-1 text-xs font-medium rounded-full bg-[var(--gold)]/10 text-[var(--gold-light)] border border-[var(--gold)]/25 uppercase">
-                        {m.tier}
+                        {m.tierName || 'VIP'}
                       </span>
                     </td>
 
                     {/* Ngày tham gia */}
                     <td className="py-4 px-5 align-middle">
-                      <span className="text-xs text-[#aaa] font-medium">{m.joinedDate}</span>
+                      <span className="text-xs text-[#aaa] font-medium">{m.memberSince}</span>
                     </td>
 
                     {/* Trạng thái */}
@@ -173,13 +173,14 @@ export default function AdminMembersPage() {
                     <td className="py-4 px-5 align-middle text-right">
                       <div className="inline-flex items-center gap-2">
                         <select
-                          value={m.tier}
-                          onChange={(e) => handleUpgrade(m.id, e.target.value as any)}
+                          value={m.tierName}
+                          onChange={(e) => handleUpgrade(m.id, e.target.value)}
                           className="h-8 bg-[#141414] border border-white/10 rounded-lg px-2 text-xs text-white focus:outline-none"
                         >
-                          <option value="curated">Curated</option>
-                          <option value="privilege">Privilege</option>
-                          <option value="sovereign">Sovereign</option>
+                          <option value="The Privé Tier">The Privé Tier</option>
+                          <option value="The Obsidian Reserve">The Obsidian Reserve</option>
+                          <option value="Single Access Pass">Single Access Pass</option>
+                          <option value="Executive Concierge Admin">Executive Concierge Admin</option>
                         </select>
                         <button
                           type="button"

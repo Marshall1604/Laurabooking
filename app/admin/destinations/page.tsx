@@ -625,7 +625,7 @@ export default function AdminDestinationsPage() {
                               ${s.fromPriceUsd} USD
                             </div>
                             <span className="text-[0.7rem] text-[#777] block mt-0.5 font-mono">
-                              {(s.fromPriceVnd || s.fromPriceUsd * 25000).toLocaleString('vi-VN')} đ
+                              {(s.fromPriceVnd || (s.fromPriceUsd || 0) * 25000).toLocaleString('vi-VN')} đ
                             </span>
                           </td>
 

@@ -33,6 +33,8 @@ export interface TestimonialItem {
   author: string;
   title: string;
   location: string;
+  role?: string;
+  city?: string;
   rating: number;
   experience: string;
 }
@@ -55,6 +57,7 @@ export interface MembershipPlan {
   ctaText: string;
   ctaLink: string;
   isPopular?: boolean;
+  isFeatured?: boolean;
 }
 
 export const HERO_DATA = {
