@@ -1,0 +1,4 @@
+interface:
+  display_name: "Douyin Studio Prompt"
+  short_description: "Generate prompts for Douyin batch processing modules"
+  default_prompt: "Create a complete Antigravity prompt for Douyin Studio."

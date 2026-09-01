@@ -1,0 +1,4 @@
+interface:
+  display_name: "Premium Landing Prompt"
+  short_description: "Generate implementation-ready premium landing page prompts"
+  default_prompt: "Create a complete prompt for a premium motion landing page."

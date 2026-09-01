@@ -1,0 +1,98 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
+
+@theme {
+  --font-serif: var(--font-aurelis-display), 'Playfair Display', Georgia, serif;
+  --font-sans: var(--font-aurelis-sans), 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-mono: var(--font-aurelis-sans), 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-display: var(--font-aurelis-display), 'Playfair Display', Georgia, serif;
+}
+
+:root {
+  --background: #050505;
+  --foreground: #f3eee5;
+  --gold: #d4af37;
+  --gold-light: #f5d77b;
+  --gold-dark: #b8860b;
+  --muted: #aaa49a;
+  --border: rgba(218, 189, 126, 0.2);
+  --card: #090909;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  background: var(--background);
+  color-scheme: dark;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  margin: 0;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-aurelis-sans), 'Plus Jakarta Sans', system-ui, sans-serif;
+  overflow-x: hidden;
+}
+
+/* Big Titles & Headings: Playfair Display */
+h1, h2, h3, .font-serif, .font-display {
+  font-family: var(--font-aurelis-display), 'Playfair Display', Georgia, serif;
+  letter-spacing: -0.015em;
+}
+
+/* All other texts, buttons, badges, labels: Google Font Plus Jakarta Sans */
+p, span, a, button, input, select, textarea, label, div, nav, table, th, td, .font-sans, .font-mono {
+  font-family: var(--font-aurelis-sans), 'Plus Jakarta Sans', system-ui, sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #050505;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(218, 189, 126, 0.25);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(218, 189, 126, 0.5);
+}
+
+/* Selection */
+::selection {
+  background: #d4af37;
+  color: #050505;
+}
+
+/* Utility Animations */
+@keyframes pulse-subtle {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+.animate-pulse-subtle {
+  animation: pulse-subtle 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}

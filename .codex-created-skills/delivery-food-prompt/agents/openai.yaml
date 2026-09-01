@@ -1,0 +1,4 @@
+interface:
+  display_name: "Delivery Food Prompt"
+  short_description: "Generate prompts for food delivery SaaS modules"
+  default_prompt: "Create a complete Antigravity prompt for Delivery Food."
