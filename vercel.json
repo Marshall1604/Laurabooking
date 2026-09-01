@@ -1,0 +1,7 @@
+{
+  "buildCommand": "vinext build",
+  "outputDirectory": "dist/client",
+  "framework": null,
+  "cleanUrls": true,
+  "trailingSlash": false
+}
