@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Script from 'next/script';
 import { Playfair_Display, Plus_Jakarta_Sans } from 'next/font/google';
 import './globals.css';
 import { AuthProvider } from '@/lib/auth/context';
@@ -116,6 +117,22 @@ export default function RootLayout({
         />
       </head>
       <body className="bg-[#050505] text-[#f3eee5] font-sans antialiased selection:bg-[#d4af37] selection:text-black">
+        {/* Google Analytics (GA4) */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-L8F30R4Z6B"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics-init" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-L8F30R4Z6B', {
+              page_path: window.location.pathname,
+            });
+          `}
+        </Script>
+
         <I18nProvider>
           <AuthProvider>
             {children}
